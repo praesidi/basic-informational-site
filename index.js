@@ -31,4 +31,4 @@ function openHTML(req, res) {
   res.end();
 }
 
-http.createServer(openHTML).listen(8080);
+http.createServer(openHTML).listen(port);

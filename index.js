@@ -1,34 +1,24 @@
-import http from "http";
-import fs from "fs";
+import express from "express";
 
+const app = express();
 const port = "8080";
 
-function openHTML(req, res) {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/html");
-  let page = null;
+app.get(/^\/(|index\.html)$/, (req, res) => {
+  res.sendFile("index.html", { root: "./pages/" });
+});
 
-  switch (req.url) {
-    case "/index.html":
-    case "/":
-      page = fs.readFileSync("./pages/index.html", "utf8");
-      break;
+app.get("/about.html", (req, res) => {
+  res.sendFile("about.html", { root: "./pages/" });
+});
 
-    case "/about.html":
-      page = fs.readFileSync("./pages/about.html", "utf8");
-      break;
+app.get("/contact-me.html", (req, res) => {
+  res.sendFile("contact-me.html", { root: "./pages/" });
+});
 
-    case "/contact-me.html":
-      page = fs.readFileSync("./pages/contact-me.html", "utf8");
-      break;
+app.get("*", (req, res) => {
+  res.sendFile("404.html", { root: "./pages/" });
+});
 
-    default:
-      page = fs.readFileSync("./pages/404.html", "utf8");
-      break;
-  }
-
-  res.write(page);
-  res.end();
-}
-
-http.createServer(openHTML).listen(port);
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
